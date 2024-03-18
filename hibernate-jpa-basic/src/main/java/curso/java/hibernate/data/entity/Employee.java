@@ -1,37 +1,40 @@
 package curso.java.hibernate.data.entity;
 
 import jakarta.persistence.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "TBL_EMPLOYEE")
-public class Employee implements Serializable {
+@Entity  // Define que esta clase es una entidad persistente
+@Table(name = "TBL_EMPLOYEE")  // Define el nombre de la tabla en la base de datos
+public class Employee implements Serializable { // Interfaz para poder Serializar
 
   @Serial
   private static final long serialVersionUID = -1;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column
+  @Id  // Marca el campo como clave primaria
+  @GeneratedValue(strategy = GenerationType.IDENTITY)  // Genera valores automáticamente para el campo
+  @Column  // Define la columna en la base de datos
   private Integer id;
 
-  @Column
+  @Column  // Define la columna en la base de datos
   private String email;
 
-  @Column
+  @Column  // Define la columna en la base de datos
   private String firstName;
 
-  @Column
+  @Column  // Define la columna en la base de datos
   private String lastName;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-  @JoinColumn(name = "employeeId")
-  private Set<Task> tasks = new HashSet<>();
 
+  // Esto no es un Columno de la DB, define la relacion Solo
+  // oneEmployee to many task
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)  // Define una relación (one to many) con otra entidad
+  @JoinColumn(name = "employeeId")  // Define la columna que actúa como clave externa
+  private Set<Task> tasks = new HashSet<>();  // Una colección de tareas asociadas al empleado
+
+  // Métodos de acceso (getters y setters)
   public Integer getId() {
     return id;
   }
@@ -63,14 +66,16 @@ public class Employee implements Serializable {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
+
   public Set<Task> getTasks() {
     return tasks;
   }
+
   public void setTasks(Set<Task> tasks) {
     this.tasks = tasks;
   }
 
-  @Override
+  @Override  // Sobrescribe el método toString para representar la información del objeto como una cadena
   public String toString() {
     return "Employee{" +
             "id=" + id +
@@ -81,3 +86,4 @@ public class Employee implements Serializable {
             '}';
   }
 }
+
