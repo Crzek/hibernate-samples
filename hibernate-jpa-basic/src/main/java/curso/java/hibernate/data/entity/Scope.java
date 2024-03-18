@@ -66,7 +66,8 @@ public class Scope implements Serializable {
 
     @Override
     public String toString() {
-        return "Scope{" +
+        return "\n------ " +
+                "Scope{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

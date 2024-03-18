@@ -1,6 +1,7 @@
 package curso.java.hibernate;
 
 import curso.java.hibernate.data.EmployeeRepository;
+import curso.java.hibernate.data.ScopeRepository;
 import curso.java.hibernate.data.entity.Employee;
 import curso.java.hibernate.data.entity.Scope;
 import curso.java.hibernate.data.entity.Task;
@@ -23,7 +24,10 @@ public class HibernateExampleApp implements CommandLineRunner {
   private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
-  EmployeeRepository repository;
+  EmployeeRepository repositoryEmployee;
+
+  @Autowired
+  ScopeRepository repositoryScope;
 
   public static void main(String[] args) { // los args se contienen dentro del [arg,arg2]
     SpringApplication.run(HibernateExampleApp.class, args);
@@ -39,31 +43,41 @@ public class HibernateExampleApp implements CommandLineRunner {
     emp2.setFirstName("Bart");
     emp2.setLastName("Simpson");
 
-    Scope scop1 = new Scope("Developer","Desarrollar app en Flutter");
+    emp2.setTasks(getTasks());
 
-    emp2.setTasks(getTasks(scop1));
-
-    repository.save(emp2);
-    Optional<Employee> emp = repository.findById(2L);
+    repositoryEmployee.save(emp2);
+    Optional<Employee> emp = repositoryEmployee.findById(2L);
     emp.ifPresent(employee -> logger.info("Employee id 2 -> {}", emp.get()));
 
-    repository.findAll().forEach(System.out::println);
+    // Ambito
+    Scope scop1 = new Scope();
+    scop1.setName("Developer");
+    scop1.setDescription("Desarrollar app en Flutter");
+    scop1.setTasks(getTasks());
+
+    repositoryScope.save(scop1);
+    Optional<Scope> scp = repositoryScope.findById(1L);
+    scp.ifPresent(scope -> logger.info("Scope id 1 -> {}", scp.get()));
+
+
+    repositoryEmployee.findAll().forEach(System.out::println);
+    repositoryScope.findAll().forEach(System.out::println);
   }
 
-  private Set<Task> getTasks(Scope scope) {
+  private Set<Task> getTasks() {
 
     Set<Task> tasks = new HashSet<>(); //Coleccion
 
     Task task1 = new Task();
     task1.setTaskName("report generation");
     task1.setTaskDescription("Daily report generation");
-    task1.addScope(scope);
+//    task1.addScope(scope);
     tasks.add(task1);
 
     Task task2 = new Task();
     task2.setTaskName("view generation");
     task2.setTaskDescription("Daily view generation");
-    task2.addScope(scope);
+//    task2.addScope(scope);
     tasks.add(task2);
     return tasks;
   }

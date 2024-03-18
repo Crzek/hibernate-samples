@@ -77,7 +77,8 @@ public class Employee implements Serializable { // Interfaz para poder Serializa
 
   @Override  // Sobrescribe el método toString para representar la información del objeto como una cadena
   public String toString() {
-    return "Employee{" +
+    return "\n------ " +
+            "Employee{" +
             "id=" + id +
             ", email='" + email + '\'' +
             ", firstName='" + firstName + '\'' +
